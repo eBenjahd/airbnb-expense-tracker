@@ -1,0 +1,130 @@
+# ========================================================
+# LOGS Y DEBUG
+# ========================================================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ========================================================
+# VARIABLES DE ENTORNO
+# ========================================================
+.env
+.env.*
+*.env
+
+# ========================================================
+# NODE / FRONTEND
+# ========================================================
+node_modules/
+dist/
+dist-ssr/
+*.local
+*.lock
+*.tsbuildinfo
+
+# Frontend framework build dirs (React, Vite, etc.)
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# ========================================================
+# PYTHON / DJANGO
+# ========================================================
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual envs
+env/
+venv/
+.venv/
+benja-env/
+
+#Static files
+staticfiles/
+media/
+
+# Archivos y carpetas de build
+.Python
+build/
+develop-eggs/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Coverage
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Traducciones y documentación
+*.mo
+*.pot
+docs/_build/
+
+# Django específico
+*.log
+local_settings.py
+db.sqlite3
+
+# Si usas otra DB local temporal (opcional)
+*.db
+*.sqlite3
+
+# ========================================================
+# DOCKER (opcional)
+# ========================================================
+*.pid
+*.tar
+*.gz
+*.bak
+*.swp
+docker-compose.override.yml
+
+# ========================================================
+# CONFIGURACIONES DE EDITORES
+# ========================================================
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ========================================================
+# OSX / MAC
+# ========================================================
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
