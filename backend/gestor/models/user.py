@@ -1,14 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class User(models.Model):
+class User(AbstractUser):
 
-    username = models.CharField(max_length=150, unique=True, verbose_name='Nombre de usuario')
-    email = models.EmailField(unique=True, verbose_name='Correo electrónico')
-    password = models.CharField(max_length=128, verbose_name='Contraseña')  # Nota: aquí no hay hash por simplicidad
-    first_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Nombre')
-    last_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Apellido')
-    is_active = models.BooleanField(default=True, verbose_name='Activo')
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creación')
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
     def __str__(self):
-        return self.username
+        return self.email

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import environ
 
 
@@ -154,10 +155,17 @@ STATIC_ROOT = BASE_DIR / 'staticfiles' # Directory where static files will be co
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # Requiere autenticación por defecto
-    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),  # duración del access token
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),    # duración del refresh token
+    "ROTATE_REFRESH_TOKENS": False,  # opcional: cambiar a True si quieres que se genere refresh nuevo cada vez
+    "BLACKLIST_AFTER_ROTATION": True,  # invalida los refresh antiguos si usas ROTATE_REFRESH_TOKENS=True
+    "AUTH_HEADER_TYPES": ("Bearer",),  # el frontend debe enviar: Authorization: Bearer <token>
+}
+
+AUTH_USER_MODEL = 'gestor.User'
