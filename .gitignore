@@ -42,7 +42,6 @@ __pycache__/
 env/
 venv/
 .venv/
-benja-env/
 
 #Static files
 staticfiles/
