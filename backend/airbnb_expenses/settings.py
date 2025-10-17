@@ -75,6 +75,7 @@ MIDDLEWARE = [
 # CORS settings
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])  # List of allowed origins for CORS
 CORS_ALLOW_ALL_ORIGINS = env('CORS_ALLOW_ALL_ORIGINS', default=False) # Deactivate in production FALSE 
+CORS_ALLOW_CREDENTIALS = True  # THIS IS NECESSARY WHEN PROVIDING TOKENS
 
 ROOT_URLCONF = 'airbnb_expenses.urls'
 
