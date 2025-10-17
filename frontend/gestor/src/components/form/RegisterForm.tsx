@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 import { registerSchema, type RegisterFormValues } from "../../schemas/authSchema";
 import { registerUser } from '../../api/authAPI';
 import Cookies from 'js-cookie';
@@ -9,6 +10,7 @@ import Form from './components/Form';
 function RegisterForm() {
 
     const [error,setError] = useState<string | null>(null)
+    const navigate = useNavigate()
     const { control, handleSubmit, formState: { errors }, reset } = useForm<RegisterFormValues>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -28,6 +30,7 @@ function RegisterForm() {
             
             console.log(`User registered correctly: ${res.user}`) // debug, erase in production
 
+            navigate('/', {replace: true})
             reset()
             setError(null)
         } catch (err: any) {

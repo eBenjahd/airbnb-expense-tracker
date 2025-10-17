@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 import { loginSchema, type LoginFormValues } from "../../schemas/authSchema";
 import { loginUser } from "../../api/authAPI";
 import Cookies from "js-cookie";
@@ -9,6 +10,7 @@ import Form from "./components/Form";
 function LoginForm() {
 
     const [error, setError] = useState<string | null>(null)
+    const navigate = useNavigate()
     const { control, handleSubmit, formState: { errors }, reset } = useForm<LoginFormValues>({
         resolver:zodResolver(loginSchema),
         defaultValues: {
@@ -25,6 +27,8 @@ function LoginForm() {
             Cookies.set("refreshToken", res.tokens.refresh, { expires: 7 });
 
             console.log(`User logged in: ${res.user.email}`); // debug
+
+            navigate('/', {replace: true})
             reset();
             setError(null);
 
