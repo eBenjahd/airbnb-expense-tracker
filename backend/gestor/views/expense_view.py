@@ -24,7 +24,7 @@ class ExpenseView(viewsets.ModelViewSet):
         return Expense.objects.filter(user=self.request.user, is_active=True)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save()
 
     @action(detail=False,methods=['get'])
     def summary_by_month(self, request):

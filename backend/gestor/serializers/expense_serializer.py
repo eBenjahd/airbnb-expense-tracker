@@ -17,3 +17,14 @@ class ExpenseSerializer(serializers.ModelSerializer):
             'created_at'
         ]
         read_only_fields = ['id', 'user', 'created_at']
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        user = request.user if request else None
+
+        expense = Expense.objects.create(
+            user=user,
+            **validated_data
+        )
+
+        return expense

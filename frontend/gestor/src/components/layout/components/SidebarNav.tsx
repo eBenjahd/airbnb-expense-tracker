@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom"
 interface NavItem {
     label: string
     to: string
+    icon: string
 }
 
 interface SidebarNavProps {
@@ -20,7 +21,8 @@ function SidebarNav({links} : SidebarNavProps) {
                     to={link.to}
                     end={link.to === '/'}
                 >
-                    {link.label}
+                    <img src={link.icon} alt={link.label} className="w-5 h-5" />
+                    <span>{link.label}</span>
                 </NavLink>
             ))}
         </nav>

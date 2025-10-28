@@ -1,8 +1,12 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import MinValueValidator
+from decimal import Decimal
 from .user import User 
 from .category import Category
+
+def today_date():
+    return timezone.now().date() # This returns a date not datetime
 
 
 class Expense(models.Model):
@@ -31,7 +35,7 @@ class Expense(models.Model):
     amount = models.DecimalField(
         max_digits=10, 
         decimal_places=2, 
-        validators=[MinValueValidator(0.01)], 
+        validators=[MinValueValidator(Decimal('0.01'))], 
         verbose_name='Amount',
         ) # Amount of the expense
     
@@ -63,7 +67,7 @@ class Expense(models.Model):
         ) # Description of the expense
     
     date = models.DateField(
-        default=timezone.now,
+        default=today_date,
         verbose_name='Date'
         ) # Date of the expense
     
