@@ -40,28 +40,33 @@ class ExpenseView(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'])
     def summary_by_category(self, request):
-        user = request.user
-        year = request.query_params.get('year')
-        month = request.query_params.get('month')
+        
+            user = request.user
+            year = request.query_params.get('year')
+            month = request.query_params.get('month')
 
-        filters = {'user': user, 'category__isnull': False}
-        if year:
-            filters['date__year'] = year
-        if month:
-            filters['date__month'] = month
+            if not user.is_authenticated:
+                return Response({"error": "User not authenticated"}, status=401)
 
-        if not Expense.objects.filter(**filters).exists():
-            return Response([])
+            filters = {'user': user, 'category__isnull': False}
 
-        data = (
-            Expense.objects
-            .filter(**filters)
-            .values('category__name')
-            .annotate(total=Sum('amount'))
-            .order_by('-total')
-        )
+            if year:
+                filters['date__year'] = int(year)
+            if month:
+                filters['date__month'] = int(month)
 
-        return Response(data)
+            if not Expense.objects.filter(**filters).exists():
+                return Response([])
+
+            data = (
+                Expense.objects
+                .filter(**filters)
+                .values('category__category_name')
+                .annotate(total=Sum('amount'))
+                .order_by('-total')
+            )
+
+            return Response(data, status=200)
 
     @action(detail=False, methods=['get'])
     def summary_dashboard(self, request):
