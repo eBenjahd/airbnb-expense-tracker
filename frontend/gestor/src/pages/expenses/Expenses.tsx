@@ -3,10 +3,12 @@ import CategoryForm from "./components/CategoryForm"
 import { api } from "../../api/client"
 import { useState } from "react"
 import { useCategoryContext } from "../../context/CategoryContext"
+import { useAddExpense } from "../../hooks/useAddExpense"
 
 function Expenses() {  
 
   const {categories, refetch} = useCategoryContext()
+  const { mutate: addExpense} = useAddExpense();
   const hasCategories = categories && categories.length > 0
 
 
@@ -38,22 +40,17 @@ function Expenses() {
 
   const handleAddSubmit = async (data: any) => {
 
-    try {
-
-      setExpenseError(null)
-      setExpenseSuccess(null)
-      await api.post('/expenses/', data)
-
-      setExpenseSuccess(`Expense added successfully`)
-    } catch (error: any) {
-
-      if (error.response) {
-        console.error("Backend error:", error.response.data)
-        setExpenseError(JSON.stringify(error.response.data, null, 2))
-      } else {
-        setExpenseError("Something went wrong. Please try again.")
-      }
-    }
+    addExpense(data, {
+      onSuccess: () => setExpenseSuccess("Expense added successfully"),
+      onError: (error: any) => {
+        if (error.response) {
+          setExpenseError(JSON.stringify(error.response.data, null, 2));
+        } else {
+          setExpenseError("Something went wrong. Please try again.");
+        }
+      },
+    });
+    
   }
   return (
     <div>

@@ -1,4 +1,5 @@
 import Summary from './components/Summary'
+import ExpenseByCategoryChart from './components/ExpenseByCategoryChart'
 
 function Dashboard() {
   return (
@@ -6,6 +7,8 @@ function Dashboard() {
       Dashboard
 
       <Summary />
+
+      <ExpenseByCategoryChart />
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import type { Control, FieldValues, Path } from 'react-hook-form';
 import InputForm from "./InputForm";
+import Button from './Button';
 
 interface Field {
   name: string;
@@ -13,9 +14,10 @@ interface FormProps<T extends FieldValues> {
   control: Control<T>;
   errors: Record<string, any>;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
+  submitText: string
 }
 
-function Form<T extends FieldValues>({ fields, control, errors, onSubmit }: FormProps<T>) {
+function Form<T extends FieldValues>({ fields, control, errors, onSubmit, submitText }: FormProps<T>) {
   return (
     <form onSubmit={onSubmit}>
       {fields.map((field) => (
@@ -30,7 +32,7 @@ function Form<T extends FieldValues>({ fields, control, errors, onSubmit }: Form
         />
       ))}
 
-      <button type="submit">Register</button>
+      <Button type='submit'>{submitText}</Button>
     </form>
   );
 }

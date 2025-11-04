@@ -53,6 +53,7 @@ function RegisterForm() {
             control={control}
             errors={errors}
             onSubmit={handleSubmit(onSubmit)}
+            submitText="Register"
         />
 
         {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
