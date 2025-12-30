@@ -61,7 +61,8 @@ class ExpenseView(viewsets.ModelViewSet):
             data = (
                 Expense.objects
                 .filter(**filters)
-                .values('category__category_name')
+                .annotate(period=TruncMonth('date'))
+                .values('category__category_name','period')
                 .annotate(total=Sum('amount'))
                 .order_by('-total')
             )
@@ -110,3 +111,29 @@ class ExpenseView(viewsets.ModelViewSet):
         }
 
         return Response(data)
+    
+    @action(detail=False, methods=['get'])
+    def summary_by_category_month(self, request):
+        user = request.user
+
+        year = request.query_params.get('year')
+        month = request.query_params.get('month')
+
+        now = datetime.now()
+        year = int(year) if year else now.year
+        month = int(month) if month else now.month
+
+        data = (
+            Expense.objects
+            .filter(
+                user=user,
+                date__year=year,
+                date__month=month,
+                category__isnull=False
+            )
+            .values('category__category_name')
+            .annotate(total=Sum('amount'))
+            .order_by('-total')
+        )
+
+        return Response(list(data), status=200)

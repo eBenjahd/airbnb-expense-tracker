@@ -8,7 +8,8 @@ export interface CategoryParams {
 
 export interface CategorySummary {
     category__category_name: string,
-    total: number
+    total: number,
+    period?: string,
 }
 
 export const useExpenseSummaryByCategory = (params?: CategoryParams) => {

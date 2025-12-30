@@ -1,8 +1,8 @@
 function Help() {
   return (
-    <div>
+    <main>
       Help
-    </div>
+    </main>
   )
 }
 

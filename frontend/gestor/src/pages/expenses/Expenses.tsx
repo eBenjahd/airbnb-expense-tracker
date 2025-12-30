@@ -4,6 +4,7 @@ import { api } from "../../api/client"
 import { useState } from "react"
 import { useCategoryContext } from "../../context/CategoryContext"
 import { useAddExpense } from "../../hooks/useAddExpense"
+import { useQueryClient } from '@tanstack/react-query';
 
 function Expenses() {  
 
@@ -11,6 +12,7 @@ function Expenses() {
   const { mutate: addExpense} = useAddExpense();
   const hasCategories = categories && categories.length > 0
 
+  const queryClient = useQueryClient();
 
   const [categorySuccess, setCategorySuccess] = useState<string | null>(null)
   const [categoryError, setCategoryError] = useState<string | null>(null)
@@ -41,7 +43,12 @@ function Expenses() {
   const handleAddSubmit = async (data: any) => {
 
     addExpense(data, {
-      onSuccess: () => setExpenseSuccess("Expense added successfully"),
+      onSuccess: () => {
+        setExpenseSuccess("Expense added successfully")
+        queryClient.invalidateQueries({
+          queryKey: ['categoryByMonth']
+        })
+      },
       onError: (error: any) => {
         if (error.response) {
           setExpenseError(JSON.stringify(error.response.data, null, 2));
@@ -53,30 +60,30 @@ function Expenses() {
     
   }
   return (
-    <div>
+    <main>
       
-    <h2>Expenses</h2>
+      <h2>Expenses</h2>
 
-    {/* --- CATEGORY FORM --- */}
-    <CategoryForm onSubmit={handleAddCategory} />
-    {categorySuccess && <p style={{ color: "green" }}>{categorySuccess}</p>}
-    {categoryError && <p style={{ color: "red" }}>{categoryError}</p>}
+      {/* --- CATEGORY FORM --- */}
+      <CategoryForm onSubmit={handleAddCategory} />
+      {categorySuccess && <p style={{ color: "green" }}>{categorySuccess}</p>}
+      {categoryError && <p style={{ color: "red" }}>{categoryError}</p>}
 
-    <hr />
+      <hr />
 
-    {/* --- EXPENSE FORM --- */}
-    {!hasCategories ? (
-      <p style={{ color: "gray" }}>
-        ⚠️ You must add at least one category before adding expenses.
-      </p>
-    ) : (
-      <>
-        <ExpenseForm onSubmit={handleAddSubmit} />
-        {expenseSuccess && <p style={{ color: "green" }}>{expenseSuccess}</p>}
-        {expenseError && <p style={{ color: "red" }}>{expenseError}</p>}
-      </>
-    )}
-    </div>
+      {/* --- EXPENSE FORM --- */}
+      {!hasCategories ? (
+        <p style={{ color: "gray" }}>
+          ⚠️ You must add at least one category before adding expenses.
+        </p>
+      ) : (
+        <>
+          <ExpenseForm onSubmit={handleAddSubmit} />
+          {expenseSuccess && <p style={{ color: "green" }}>{expenseSuccess}</p>}
+          {expenseError && <p style={{ color: "red" }}>{expenseError}</p>}
+        </>
+      )}
+    </main>
   )
 }
 

@@ -14,7 +14,7 @@ function Summary() {
   if (!data) return <p>No data available</p>;
 
   return (
-    <div>
+    <section>
       <div>
         <p>Total Expenses</p>
         <p>${data.year_total}</p>
@@ -29,7 +29,7 @@ function Summary() {
         <p>Average Expense</p>
         <p>${data.average_expense}</p>
       </div>
-    </div>
+    </section>
   );
 }
 

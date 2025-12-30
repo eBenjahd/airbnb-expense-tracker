@@ -1,8 +1,8 @@
 function Reports() {
   return (
-    <div>
+    <main>
       Reports
-    </div>
+    </main>
   )
 }
 

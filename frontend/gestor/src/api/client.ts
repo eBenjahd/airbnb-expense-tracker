@@ -29,8 +29,6 @@ api.interceptors.response.use(
                 Cookies.set('accessToken', data.access, {expires: 1})
                 originalRequest.headers['Authorization'] = `Bearer ${data.access}`;
 
-                console.log('✅ Nuevo accessToken generado:', data.access);
-
                 return api(originalRequest);
             } catch (refreshError){
 

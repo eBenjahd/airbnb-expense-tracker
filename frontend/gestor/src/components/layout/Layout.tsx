@@ -16,10 +16,10 @@ const links = [
 
 function Layout() {
   return (
-    <div>
+    <>
       <SidebarNav links={links} />
       <Outlet />
-    </div>
+    </>
   )
 }
 
