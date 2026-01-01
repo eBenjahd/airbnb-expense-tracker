@@ -8,6 +8,8 @@ from gestor.serializers import ExpenseSerializer
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from datetime import datetime
+from datetime import date
+import calendar
 
 class ExpensePagination(PageNumberPagination):
     page_size = 20  # Gastos por página
@@ -26,16 +28,32 @@ class ExpenseView(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save()
 
-    @action(detail=False,methods=['get'])
+    @action(detail=False, methods=['get'])
     def summary_by_month(self, request):
+        user = request.user
+
+        from_month = request.query_params.get('from')  # YYYY-MM
+        to_month = request.query_params.get('to')      # YYYY-MM
+
+        qs = Expense.objects.filter(user=user)
+
+        if from_month:
+            y, m = map(int, from_month.split('-'))
+            qs = qs.filter(date__gte=date(y, m, 1))
+
+        if to_month:
+            y, m = map(int, to_month.split('-'))
+            last_day = calendar.monthrange(y, m)[1]
+            qs = qs.filter(date__lte=date(y, m, last_day))
+
         data = (
-            Expense.objects
-            .filter(user=request.user)
+            qs
             .annotate(month=TruncMonth('date'))
             .values('month')
             .annotate(total=Sum('amount'))
             .order_by('month')
         )
+
         return Response(data)
     
     @action(detail=False, methods=['get'])

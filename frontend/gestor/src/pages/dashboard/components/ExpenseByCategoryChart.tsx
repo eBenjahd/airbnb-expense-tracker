@@ -6,14 +6,19 @@ import {
 } from "recharts";
 
 import { cardStyles } from './styles/styles';
-import {COLORS }from './styles/colors';
+import { COLORS }from './styles/colors';
 import { useSummaryCategorybyMonth } from "../../../hooks/useSummaryCategorybyMonth";
 
 // MAKE IT MORE REACT WAY LATER
 
-export default function ExpenseByCategoryChart() {
+interface Props {
+  year?: number
+  month?: number
+}
 
-  const { data, isLoading, error } = useSummaryCategorybyMonth();
+export default function ExpenseByCategoryChart({ year, month }: Props) {
+
+  const { data, isLoading, error } = useSummaryCategorybyMonth({year, month});
 
   const chartData = data
     ? data.map((item) => ({

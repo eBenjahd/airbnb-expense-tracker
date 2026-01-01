@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../api/client";
 
-export interface MonthParams {
-    year?: string
+export interface MonthRangeParams {
+    from?: string
+    to?: string
 }
 
 // for backend response 
@@ -11,7 +12,7 @@ export interface MonthlyExpenseSummary {
     total: number
 }
 
-export const useExpenseSummaryByMonth = (params?: MonthParams) => {
+export const useExpenseSummaryByMonth = (params?: MonthRangeParams) => {
     
     return useQuery<MonthlyExpenseSummary[]>({
         queryKey: ['expenseSummaryByMonth', params],
