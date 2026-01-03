@@ -8,7 +8,7 @@ import { useCategoryContext } from "../../../context/CategoryContext"
 
 type ExpenseFormValues = z.infer<typeof expenseSchema>
 
-function ExpenseForm({onSubmit}: { onSubmit: (data: ExpenseFormValues) => void }) {
+function ExpenseForm({onSubmit, disabled}: { onSubmit: (data: ExpenseFormValues) => void, disabled? :boolean}) {
 
 
     const { categories } = useCategoryContext()
@@ -25,13 +25,19 @@ function ExpenseForm({onSubmit}: { onSubmit: (data: ExpenseFormValues) => void }
           },
     })
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form 
+      onSubmit={handleSubmit(onSubmit)}
+      style={{
+        opacity: disabled ? 0.5 : 1,
+      }}  
+    >
       <InputForm
         name="title"
         control={control}
         label="Title"
         placeholder="Expense title"
         error={errors.title?.message}
+        disabled={disabled}
       />
 
       <InputForm
@@ -41,6 +47,7 @@ function ExpenseForm({onSubmit}: { onSubmit: (data: ExpenseFormValues) => void }
         type="number"
         placeholder="Amount"
         error={errors.amount?.message}
+        disabled={disabled}
       />
 
       <SelectForm
@@ -77,6 +84,7 @@ function ExpenseForm({onSubmit}: { onSubmit: (data: ExpenseFormValues) => void }
         label="Supplier"
         placeholder="Service supplier"
         error={errors.supplier?.message}
+        disabled={disabled}
       />
 
       <InputForm
@@ -85,9 +93,10 @@ function ExpenseForm({onSubmit}: { onSubmit: (data: ExpenseFormValues) => void }
         label="Description"
         placeholder="Describe your expense..."
         error={errors.description?.message}
+        disabled={disabled}
       />
 
-      <button type="submit">Add Expense</button>
+      <button type="submit" disabled={disabled}>Add Expense</button>
     </form>
   )
 }

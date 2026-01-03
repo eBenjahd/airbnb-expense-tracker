@@ -7,10 +7,11 @@ interface InputFormProps<T extends FieldValues> {
     placeholder?: string
     label?: string
     error?: string
+    disabled?: boolean
 }
 
 
-function InputForm<T extends FieldValues>({name, control, type, placeholder, label, error}: InputFormProps<T>) {
+function InputForm<T extends FieldValues>({name, control, type, placeholder, label, error, disabled = false}: InputFormProps<T>) {
   return (
     <div className="input-wrapper">
       {label && <label htmlFor={name}>{label}</label>}
@@ -25,6 +26,7 @@ function InputForm<T extends FieldValues>({name, control, type, placeholder, lab
             id={name}
             type={type}
             placeholder={placeholder}
+            disabled={disabled}
             className={`form-input ${error ? "invalid" : ""}`}
             value={field.value ?? ""}
           />

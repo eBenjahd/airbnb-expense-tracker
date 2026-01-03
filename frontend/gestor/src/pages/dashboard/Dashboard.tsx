@@ -25,7 +25,7 @@ function Dashboard() {
 
       <ExpenseByCategoryChart year={year} month={currentMonth} />
 
-      <Transactions />
+      <Transactions year={year} month={currentMonth} expandable={false} />
 
       <ExpenseByMonthChart from={from} to={to}/>
     </main>

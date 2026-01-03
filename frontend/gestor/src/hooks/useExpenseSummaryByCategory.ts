@@ -2,14 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "../api/client";
 
 export interface CategoryParams {
-    year?: string
-    month?: string
+    year?: number
+    month?: number
 }
 
 export interface CategorySummary {
     category__category_name: string,
     total: number,
-    period?: string,
+    period: string,
 }
 
 export const useExpenseSummaryByCategory = (params?: CategoryParams) => {

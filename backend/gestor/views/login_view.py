@@ -10,6 +10,8 @@ from gestor.serializers import LoginSerializer
     THIS VIEW HANDLES ONLY THE POST METHOD TO AUTHENTICATE USERS.
 '''
 
+'''CAMBIAR REFRESH TOKEN A HTTP ONLY'''
+
 class LoginView(views.APIView):
     
     permission_classes = [AllowAny]

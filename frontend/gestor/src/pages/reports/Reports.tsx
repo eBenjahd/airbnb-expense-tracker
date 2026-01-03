@@ -3,55 +3,80 @@ import ExpenseByCategoryChart from "../dashboard/components/ExpenseByCategoryCha
 import Transactions from "../dashboard/components/Transactions"
 import { useState } from "react"
 
+
+export interface DateFilters {
+  year: number
+  month: number
+  from: string // YYYY-MM
+  to: string   // YYYY-MM
+}
+
 function Reports() {
-
   const now = new Date()
+  const currentYear = now.getFullYear()
+  const currentMonth = now.getMonth() + 1
 
-  const [year, setYear] = useState(now.getFullYear())
-  const [month, setMonth] = useState(now.getMonth() + 1)
-
-  const [from, setFrom] = useState(`${year}-01`)
-  const [to, setTo] = useState(`${year}-12`)
-
-  const handleMonthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const [y, m] = e.target.value.split("-")
-    setYear(Number(y))
-    setMonth(Number(m))
-  }
+  const [filters, setFilters] = useState<DateFilters>({
+    year: currentYear,
+    month: currentMonth,
+    from: `${currentYear-1}-${String(currentMonth).padStart(2,'0')}`,
+    to: `${currentYear}-${String(currentMonth).padStart(2,'0')}`,
+  })
 
   return (
     <main>
       <h1>Reports</h1>
 
-      <input
-        type="month"
-        onChange={handleMonthChange}
-        defaultValue={`${year}-${String(month).padStart(2, "0")}`}
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <div>
+        <span>From: </span>
+        <input
+          type="month"
+          value={filters.from}
+          onChange={e =>
+            setFilters(prev => ({ ...prev, from: e.target.value }))
+          }
+        />
+        </div>
+        <div>
+          <span> to: </span>
+          <input
+            type="month"
+            value={filters.to}
+            onChange={e =>
+              setFilters(prev => ({ ...prev, to: e.target.value }))
+            }
+          />
+        </div>
+      </div>
+      <ExpenseByMonthChart
+        from={filters.from}
+        to={filters.to}
       />
 
-      <ExpenseByCategoryChart year={year} month={month} />
+      <input
+        type="month"
+        value={`${filters.year}-${String(filters.month).padStart(2, '0')}`}
+        onChange={(e) => {
+          const [y, m] = e.target.value.split('-').map(Number)
+          setFilters(prev => ({
+            ...prev,
+            year: y,
+            month: m,
+          }))
+        }}
+      />
 
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-        <label>
-          Start date:
-          <input
-            type="month"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-          />
-        </label>
+      <ExpenseByCategoryChart
+        year={filters.year}
+        month={filters.month}
+      />
 
-        <label>
-          End date:
-          <input
-            type="month"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-          />
-        </label>
-      </div>
-      <ExpenseByMonthChart from={from} to={to}/>
-      <Transactions />
+      <Transactions
+        year={filters.year}
+        month={filters.month}
+        pageSize={10}
+      />
     </main>
   )
 }

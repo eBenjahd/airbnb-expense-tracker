@@ -23,6 +23,7 @@ function Expenses() {
       try {
         setCategoryError(null)
         setCategorySuccess(null)
+        setExpenseError(null)
 
         await api.post('/categories/', data)
         setCategorySuccess(`Category added successfully.`)
@@ -30,13 +31,26 @@ function Expenses() {
         await refetch()
 
       } catch (error: any) {
-        
-        if (error.response) {
-          console.log(`Backend error: ${error.response.data}`)
-          setCategoryError(JSON.stringify(error.response.data, null, 2))
-        } else { 
-          setCategoryError("Somethin went wrong. Please try again.")
-        }
+        const backendError = error?.response?.data
+
+        if (backendError) {
+
+          const firstKey = Object.keys(backendError)[0]
+          const firstMessage = backendError[firstKey]?.[0]
+
+          if (firstMessage) {
+            setCategoryError(firstMessage)
+          } 
+
+          else if (backendError.detail) {
+            setCategoryError(backendError.detail)
+          } 
+          else {
+            setCategoryError("Invalid category data.")
+          }
+        } else {
+          setExpenseError("Something went wrong. Please try again.")
+        }       
       }
   }
 
@@ -50,39 +64,66 @@ function Expenses() {
         })
       },
       onError: (error: any) => {
-        if (error.response) {
-          setExpenseError(JSON.stringify(error.response.data, null, 2));
-        } else {
-          setExpenseError("Something went wrong. Please try again.");
+        const backendError = error?.response?.data
+
+      if (backendError) {
+        const firstKey = Object.keys(backendError)[0]
+        const firstMessage = backendError[firstKey]?.[0]
+
+        if (firstMessage) {
+          setExpenseError(firstMessage)
         }
+        else if (backendError.detail) {
+          setExpenseError(backendError.detail)
+        }
+        else {
+          setExpenseError("Invalid expense data.")
+        }
+      } else {
+        setExpenseError("Something went wrong. Please try again.")
+      }
       },
     });
     
   }
+
+  const isExpenseDisabled = !hasCategories
+
   return (
     <main>
       
       <h2>Expenses</h2>
 
       {/* --- CATEGORY FORM --- */}
-      <CategoryForm onSubmit={handleAddCategory} />
-      {categorySuccess && <p style={{ color: "green" }}>{categorySuccess}</p>}
-      {categoryError && <p style={{ color: "red" }}>{categoryError}</p>}
-
-      <hr />
+      <section>
+        <h3>Add Category</h3>
+        <CategoryForm onSubmit={handleAddCategory} />
+        {categorySuccess && <p style={{ color: "green" }}>{categorySuccess}</p>}
+        {categoryError && <p style={{ color: "red" }}>{categoryError}</p>}
+      </section>
 
       {/* --- EXPENSE FORM --- */}
-      {!hasCategories ? (
-        <p style={{ color: "gray" }}>
-          ⚠️ You must add at least one category before adding expenses.
-        </p>
-      ) : (
-        <>
-          <ExpenseForm onSubmit={handleAddSubmit} />
-          {expenseSuccess && <p style={{ color: "green" }}>{expenseSuccess}</p>}
-          {expenseError && <p style={{ color: "red" }}>{expenseError}</p>}
-        </>
-      )}
+      <section>
+        <h3>Add Expense</h3>
+        <ExpenseForm
+        onSubmit={handleAddSubmit}
+        disabled={isExpenseDisabled}
+        />
+
+        {isExpenseDisabled && (
+          <p style={{ color: "gray" }}>
+            ⚠️ You must add at least one category before adding expenses.
+          </p>
+        )}
+
+        {!isExpenseDisabled && expenseSuccess && (
+          <p style={{ color: "green" }}>{expenseSuccess}</p>
+        )}
+
+        {!isExpenseDisabled && expenseError && (
+          <p style={{ color: "red" }}>{expenseError}</p>
+        )}
+      </section>
     </main>
   )
 }

@@ -32,8 +32,8 @@ class ExpenseView(viewsets.ModelViewSet):
     def summary_by_month(self, request):
         user = request.user
 
-        from_month = request.query_params.get('from')  # YYYY-MM
-        to_month = request.query_params.get('to')      # YYYY-MM
+        from_month = request.query_params.get('from')
+        to_month = request.query_params.get('to')  
 
         qs = Expense.objects.filter(user=user)
 
@@ -82,7 +82,7 @@ class ExpenseView(viewsets.ModelViewSet):
                 .annotate(period=TruncMonth('date'))
                 .values('category__category_name','period')
                 .annotate(total=Sum('amount'))
-                .order_by('-total')
+                .order_by('-period','-total')
             )
 
             return Response(data, status=200)
