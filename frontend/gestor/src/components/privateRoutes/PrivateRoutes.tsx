@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Cookies from "js-cookie";
 import type { JSX } from "react";
 
@@ -13,7 +13,7 @@ function PrivateRoutes({ children }: PrivateRouteProps) {
         return <Navigate to='/login' replace/>
     }
     
-    return children // Logged-in
+    return children ? children : <Outlet /> // Logged-in
 }
 
 export default PrivateRoutes

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import './App.scss'
 import RegisterForm from './components/form/RegisterForm'
 import LoginForm from './components/form/LoginForm'
@@ -52,6 +52,7 @@ function App() {
           <Route path='help' element={<Help />}/>
         </Route>
         
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
     </Router>
