@@ -32,7 +32,6 @@ function ExpenseForm({onSubmit}: { onSubmit: (data: ExpenseFormValues) => void }
         label="Title"
         placeholder="Expense title"
         error={errors.title?.message}
-        disabled={disabled}
       />
 
       <InputForm
@@ -42,7 +41,6 @@ function ExpenseForm({onSubmit}: { onSubmit: (data: ExpenseFormValues) => void }
         type="number"
         placeholder="Amount"
         error={errors.amount?.message}
-        disabled={disabled}
       />
 
       <SelectForm
@@ -79,7 +77,6 @@ function ExpenseForm({onSubmit}: { onSubmit: (data: ExpenseFormValues) => void }
         label="Supplier"
         placeholder="Service supplier"
         error={errors.supplier?.message}
-        disabled={disabled}
       />
 
       <InputForm
@@ -88,10 +85,9 @@ function ExpenseForm({onSubmit}: { onSubmit: (data: ExpenseFormValues) => void }
         label="Description"
         placeholder="Describe your expense..."
         error={errors.description?.message}
-        disabled={disabled}
       />
 
-      <button type="submit" disabled={disabled}>Add Expense</button>
+      <button type="submit">Add Expense</button>
     </form>
   )
 }
