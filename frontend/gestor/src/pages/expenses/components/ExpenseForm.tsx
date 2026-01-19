@@ -8,7 +8,7 @@ import { useCategoryContext } from "../../../context/CategoryContext"
 
 type ExpenseFormValues = z.infer<typeof expenseSchema>
 
-function ExpenseForm({onSubmit, disabled}: { onSubmit: (data: ExpenseFormValues) => void, disabled? :boolean}) {
+function ExpenseForm({onSubmit}: { onSubmit: (data: ExpenseFormValues) => void }) {
 
 
     const { categories } = useCategoryContext()
@@ -25,12 +25,7 @@ function ExpenseForm({onSubmit, disabled}: { onSubmit: (data: ExpenseFormValues)
           },
     })
   return (
-    <form 
-      onSubmit={handleSubmit(onSubmit)}
-      style={{
-        opacity: disabled ? 0.5 : 1,
-      }}  
-    >
+    <form onSubmit={handleSubmit(onSubmit)}>
       <InputForm
         name="title"
         control={control}

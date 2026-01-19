@@ -3,22 +3,23 @@ import type { Category } from "../types/category";
 import { useCategory } from "../hooks/useCategory";
 
 interface CategoryContextType {
-    categories: Category[] | undefined,
+    categories: Category[],
     isLoading: boolean,
     error: Error | null,
     refetch: () => void
 }
 
 const CategoryContext = createContext<CategoryContextType>({
-    categories: undefined,
+    categories: [],
     isLoading: false,
     error: null,
     refetch: () => {}
 })
 
 export const CategoryProvider = ({ children }: {children: React.ReactNode}) => {
-    const {data: categories, isLoading, error, refetch } = useCategory()
-
+    const {data, isLoading, error, refetch } = useCategory()
+    const categories = data ? data : []
+    
     return (
         <CategoryContext.Provider value={{ categories, isLoading, error, refetch}}>
             {children}

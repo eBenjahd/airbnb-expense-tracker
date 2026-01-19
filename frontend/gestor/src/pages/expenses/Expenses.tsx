@@ -8,9 +8,10 @@ import { useQueryClient } from '@tanstack/react-query';
 
 function Expenses() {  
 
-  const {categories, refetch} = useCategoryContext()
+  const {categories, refetch } = useCategoryContext()
   const { mutate: addExpense} = useAddExpense();
-  const hasCategories = categories && categories.length > 0
+
+  const hasCategories = categories.length > 0
 
   const queryClient = useQueryClient();
 
@@ -28,29 +29,16 @@ function Expenses() {
         await api.post('/categories/', data)
         setCategorySuccess(`Category added successfully.`)
         
-        await refetch()
+        refetch()
 
       } catch (error: any) {
-        const backendError = error?.response?.data
-
-        if (backendError) {
-
-          const firstKey = Object.keys(backendError)[0]
-          const firstMessage = backendError[firstKey]?.[0]
-
-          if (firstMessage) {
-            setCategoryError(firstMessage)
-          } 
-
-          else if (backendError.detail) {
-            setCategoryError(backendError.detail)
-          } 
-          else {
-            setCategoryError("Invalid category data.")
-          }
-        } else {
-          setExpenseError("Something went wrong. Please try again.")
-        }       
+        
+        if (error.response) {
+          console.log(`Backend error: ${error.response.data}`)
+          setCategoryError(JSON.stringify(error.response.data, null, 2))
+        } else { 
+          setCategoryError("Somethin went wrong. Please try again.")
+        }
       }
   }
 
@@ -86,9 +74,6 @@ function Expenses() {
     });
     
   }
-
-  const isExpenseDisabled = !hasCategories
-
   return (
     <main>
       
@@ -103,27 +88,17 @@ function Expenses() {
       </section>
 
       {/* --- EXPENSE FORM --- */}
-      <section>
-        <h3>Add Expense</h3>
-        <ExpenseForm
-        onSubmit={handleAddSubmit}
-        disabled={isExpenseDisabled}
-        />
-
-        {isExpenseDisabled && (
-          <p style={{ color: "gray" }}>
-            ⚠️ You must add at least one category before adding expenses.
-          </p>
-        )}
-
-        {!isExpenseDisabled && expenseSuccess && (
-          <p style={{ color: "green" }}>{expenseSuccess}</p>
-        )}
-
-        {!isExpenseDisabled && expenseError && (
-          <p style={{ color: "red" }}>{expenseError}</p>
-        )}
-      </section>
+      {!hasCategories ? (
+        <p style={{ color: "gray" }}>
+          ⚠️ You must add at least one category before adding expenses.
+        </p>
+      ) : (
+        <>
+          <ExpenseForm onSubmit={handleAddSubmit} />
+          {expenseSuccess && <p style={{ color: "green" }}>{expenseSuccess}</p>}
+          {expenseError && <p style={{ color: "red" }}>{expenseError}</p>}
+        </>
+      )}
     </main>
   )
 }

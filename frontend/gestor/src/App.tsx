@@ -10,6 +10,7 @@ import Reports from './pages/reports/Reports'
 import Settings from './pages/settings/Settings'
 import Help from './pages/help/Help'
 import PublicRoutes from './components/publicRoutes/PublicRoutes'
+import { CategoryProvider } from './context/CategoryContext'
 
 function App() {
 
@@ -41,7 +42,9 @@ function App() {
           path='/'
           element={
             <PrivateRoutes>
-              <Layout />
+              <CategoryProvider>
+                <Layout />
+              </CategoryProvider>
             </PrivateRoutes>
           }
         >
